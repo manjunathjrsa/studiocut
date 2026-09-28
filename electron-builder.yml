@@ -1,0 +1,33 @@
+appId: com.studiocut.editor
+productName: StudioCut
+copyright: Copyright © 2026 StudioCut Team
+
+directories:
+  output: dist
+  buildResources: build
+
+files:
+  - src/**/*
+  - assets/**/*
+  - package.json
+
+extraResources:
+  - from: assets/luts
+    to: luts
+  - from: assets/fonts
+    to: fonts
+
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  icon: assets/icons/icon.ico
+
+nsis:
+  oneClick: false
+  perMachine: true
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: StudioCut Video Editor

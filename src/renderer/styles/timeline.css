@@ -1,0 +1,463 @@
+/*
+ * StudioCut — Timeline Styles
+ * Multi-track timeline canvas with tracks, clips, transitions, markers
+ */
+
+/* ═══════════════════════════════════════════
+   Timeline Container
+   ═══════════════════════════════════════════ */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--bg-dark);
+  overflow: hidden;
+}
+
+.timeline__toolbar {
+  height: 32px;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-3);
+  gap: var(--space-3);
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.timeline__toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.timeline__toolbar-separator {
+  width: 1px;
+  height: 16px;
+  background: var(--border-default);
+  margin: 0 var(--space-2);
+}
+
+.timeline__toolbar-btn {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  font-size: 13px;
+}
+
+.timeline__toolbar-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.timeline__toolbar-btn.active {
+  background: var(--accent-primary-dim);
+  color: var(--accent-primary);
+}
+
+.timeline__toolbar-btn--tool {
+  position: relative;
+}
+
+.timeline__toolbar-btn--tool.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 2px;
+  background: var(--accent-primary);
+  border-radius: var(--radius-full);
+}
+
+/* Zoom slider */
+.timeline__zoom-slider {
+  width: 100px;
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--bg-hover);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+}
+
+.timeline__zoom-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  background: var(--accent-primary);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  border: 2px solid var(--bg-surface);
+  transition: transform var(--transition-fast);
+}
+
+.timeline__zoom-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.timeline__toolbar-spacer {
+  flex: 1;
+}
+
+.timeline__time-display {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+  min-width: 60px;
+  text-align: center;
+}
+
+/* ═══════════════════════════════════════════
+   Timeline Body (tracks + ruler)
+   ═══════════════════════════════════════════ */
+.timeline__body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: var(--track-header-width) 1fr;
+  grid-template-rows: 24px 1fr;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Ruler */
+.timeline__ruler-corner {
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
+  border-right: 1px solid var(--border-subtle);
+}
+
+.timeline__ruler {
+  position: relative;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.timeline__ruler-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* Track headers */
+.timeline__track-headers {
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-subtle);
+}
+
+.timeline__track-headers::-webkit-scrollbar {
+  display: none;
+}
+
+/* Track header item */
+.track-header {
+  height: var(--track-height);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-3);
+  gap: var(--space-2);
+  border-bottom: 1px solid var(--border-subtle);
+  transition: background var(--transition-fast);
+  cursor: pointer;
+}
+
+.track-header:hover {
+  background: var(--bg-hover);
+}
+
+.track-header.selected {
+  background: var(--accent-primary-dim);
+}
+
+.track-header__color {
+  width: 3px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.track-header__color--video {
+  background: #6c5ce7;
+}
+
+.track-header__color--audio {
+  background: #00cec9;
+}
+
+.track-header__color--text {
+  background: #fdcb6e;
+}
+
+.track-header__color--effect {
+  background: #ff6b6b;
+}
+
+.track-header__name {
+  flex: 1;
+  font-size: var(--font-size-xs);
+  color: var(--text-primary);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.track-header__controls {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.track-header__btn {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  border-radius: 3px;
+  font-size: 10px;
+  transition: all var(--transition-fast);
+}
+
+.track-header__btn:hover {
+  background: var(--bg-active);
+  color: var(--text-primary);
+}
+
+.track-header__btn.active {
+  color: var(--accent-primary);
+}
+
+.track-header__btn.muted {
+  color: var(--accent-danger);
+}
+
+.track-header__btn.locked {
+  color: var(--accent-warning);
+}
+
+/* ═══════════════════════════════════════════
+   Tracks Canvas Area
+   ═══════════════════════════════════════════ */
+.timeline__tracks {
+  position: relative;
+  overflow: auto;
+  background: var(--bg-dark);
+}
+
+.timeline__tracks-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Playhead */
+.timeline__playhead {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--accent-danger);
+  z-index: 50;
+  pointer-events: auto;
+  cursor: ew-resize;
+}
+
+.timeline__playhead::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -5px;
+  width: 12px;
+  cursor: ew-resize;
+}
+
+.timeline__playhead::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -5px;
+  width: 12px;
+  height: 12px;
+  background: var(--accent-danger);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  pointer-events: auto;
+  cursor: ew-resize;
+}
+
+/* Snap indicator */
+.timeline__snap-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--accent-warning);
+  z-index: 45;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.timeline__snap-line.visible {
+  opacity: 1;
+}
+
+/* ═══════════════════════════════════════════
+   Clips (rendered on canvas, but selection overlay in DOM)
+   ═══════════════════════════════════════════ */
+.clip-overlay {
+  position: absolute;
+  border-radius: var(--radius-sm);
+  pointer-events: auto;
+  cursor: move;
+}
+
+.clip-overlay.selected {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: -1px;
+}
+
+.clip-overlay__trim-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  cursor: ew-resize;
+  background: transparent;
+  transition: background var(--transition-fast);
+}
+
+.clip-overlay__trim-handle:hover {
+  background: rgba(108, 92, 231, 0.5);
+}
+
+.clip-overlay__trim-handle--left {
+  left: 0;
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+}
+
+.clip-overlay__trim-handle--right {
+  right: 0;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+/* ═══════════════════════════════════════════
+   Transition Indicator
+   ═══════════════════════════════════════════ */
+.transition-indicator {
+  position: absolute;
+  height: var(--track-height);
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: 30;
+}
+
+.transition-indicator__visual {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg,
+    rgba(108, 92, 231, 0.3),
+    rgba(0, 206, 201, 0.3)
+  );
+  border: 1px solid rgba(108, 92, 231, 0.5);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.transition-indicator__icon {
+  font-size: 10px;
+  color: var(--text-accent);
+}
+
+/* ═══════════════════════════════════════════
+   Markers
+   ═══════════════════════════════════════════ */
+.marker {
+  position: absolute;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  z-index: 40;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.marker__head {
+  position: absolute;
+  top: -2px;
+  left: -4px;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-sm);
+}
+
+.marker--default .marker__head { background: var(--accent-secondary); }
+.marker--red .marker__head { background: var(--accent-danger); }
+.marker--yellow .marker__head { background: var(--accent-warning); }
+.marker--green .marker__head { background: var(--accent-success); }
+
+.marker__line {
+  width: 1px;
+  height: 100%;
+  margin: 0 auto;
+}
+
+.marker--default .marker__line { background: rgba(0, 206, 201, 0.3); }
+.marker--red .marker__line { background: rgba(255, 107, 107, 0.3); }
+
+/* ═══════════════════════════════════════════
+   Selection Rectangle
+   ═══════════════════════════════════════════ */
+.selection-rect {
+  position: absolute;
+  border: 1px solid var(--accent-primary);
+  background: rgba(108, 92, 231, 0.1);
+  z-index: 60;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════
+   Add Track Button
+   ═══════════════════════════════════════════ */
+.add-track-btn {
+  width: 100%;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border: 1px dashed var(--border-default);
+  background: transparent;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  font-size: var(--font-size-xs);
+  transition: all var(--transition-fast);
+  border-radius: 0;
+}
+
+.add-track-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  background: var(--accent-primary-dim);
+}

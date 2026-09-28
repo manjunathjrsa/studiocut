@@ -1,0 +1,59 @@
+{
+  "name": "studiocut",
+  "version": "1.0.0",
+  "description": "StudioCut — Free Professional Video Editor for Windows",
+  "main": "src/main/main.js",
+  "scripts": {
+    "dev": "electron .",
+    "test": "electron test/test-studiocut.js",
+    "build": "electron-builder build --win",
+    "package": "electron-builder build --win --dir",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "author": "StudioCut",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.1.8"
+  },
+  "dependencies": {
+    "fluent-ffmpeg": "^2.1.3",
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "@ffprobe-installer/ffprobe": "^2.1.2",
+    "chokidar": "^4.0.3"
+  },
+  "build": {
+    "appId": "com.studiocut.editor",
+    "productName": "StudioCut",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "assets/icons/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    },
+    "files": [
+      "src/**/*",
+      "assets/**/*",
+      "node_modules/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "assets/luts",
+        "to": "luts"
+      },
+      {
+        "from": "assets/fonts",
+        "to": "fonts"
+      }
+    ]
+  }
+}
